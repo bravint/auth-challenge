@@ -26,7 +26,10 @@ export const App = () => {
     const [register, setRegister] = useState(initialForm);
     const [login, setLogin] = useState(initialForm);
     const [movie, setMovie] = useState(initialMovie);
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const [movieList, setMovieList] = useState([])
 
     const navigate = useNavigate();
 
@@ -93,10 +96,16 @@ export const App = () => {
 
             setIsLoggedIn(true);
 
+            const response = await fetch (`${apiUrl}/movie`)
+            const movies = await response.json();
+            setMovieList(movies)
+
             navigate('/movies');
         }
 
-        if (endpoint == 'movie' && data) console.log(data);
+        if (endpoint == 'movie' && data) setMovieList(data)
+        
+        
     };
 
     const HandleLogout = () => {
@@ -165,6 +174,7 @@ export const App = () => {
                                     movie={movie}
                                     handleChange={handleChange}
                                     handleSubmit={handleSubmit}
+                                    movieList={movieList}
                                 />
                             }
                         />

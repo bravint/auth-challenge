@@ -6,6 +6,12 @@ const prisma = new PrismaClient();
 
 const secret = 'secret';
 
+const getMovies = async (req, res) => {
+    const fetchedMovies = await prisma.movie.findMany({});
+
+    res.json(fetchedMovies);
+}
+
 const createMovie = async (req, res) => {
     let { title, description, runtimeMins } = req.body;
 
@@ -37,9 +43,7 @@ const createMovie = async (req, res) => {
 
     const fetchedMovies = await prisma.movie.findMany({});
 
-    const response = { createdMovie, fetchedMovies };
-
-    res.json(response);
+    res.json(fetchedMovies);
 };
 
-module.exports = { createMovie };
+module.exports = { getMovies, createMovie };

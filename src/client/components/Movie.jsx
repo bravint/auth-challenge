@@ -1,9 +1,11 @@
 export const Movie = (props) => {
-    const { movie, handleChange, handleSubmit } = props;
+    const { movie, handleChange, handleSubmit, movieList } = props;
+
+    console.log(`movieList`, movieList )
 
     return (
         <>
-            <h2>Movie</h2>
+            <h2>Create a Movie</h2>
             <form onSubmit={(event) => handleSubmit(event, 'movie', movie)}>
                 <input
                     type="text"
@@ -28,6 +30,20 @@ export const Movie = (props) => {
                 />
                 <button type="submit">Create Movie</button>
             </form>
+
+            <h2>Movie List</h2>
+            <ul>
+                {movieList.map((movie) => {
+                    return (
+                        <li key={movie.id}>
+                            <h3>{movie.title}</h3>
+                            <p>{movie.description}</p>
+                            <p>{movie.runtimeMins}</p>
+                        </li>
+                    );
+                })}
+            </ul>
+
         </>
     );
 };
