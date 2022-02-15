@@ -143,6 +143,10 @@ export const App = () => {
                                 />
                             }
                         />
+                        <Route
+                            path="*"
+                            element={<Home isLoggedIn={isLoggedIn} />}
+                        />
                     </Routes>
                 </>
             )}
@@ -163,6 +167,10 @@ export const App = () => {
                                     HandleLogout={HandleLogout}
                                 />
                             }
+                        />
+                        <Route
+                            path="*"
+                            element={<Home isLoggedIn={isLoggedIn} />}
                         />
                     </Routes>
                     <br></br>
