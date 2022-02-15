@@ -25,7 +25,7 @@ function App() {
     const [movie, setMovie] = useState(initialMovie);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    console.log(login)
+    console.log(login);
 
     useEffect(() => {
         if (localStorage.getItem('token')) setIsLoggedIn(true);
@@ -39,7 +39,7 @@ function App() {
             );
 
             if (!response.ok) {
-                console.log(await response.json())
+                console.log(await response.json());
             }
 
             const data = await response.json();

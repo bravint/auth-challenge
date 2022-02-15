@@ -1,16 +1,41 @@
 const { PrismaClient } = require('@prisma/client');
+
 const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
 
 const secret = 'secret';
 
-const createMovie = async () => {
-    const {title, description, runtimeMins, token} = req.body
+const createMovie = async (req, res) => {
+    let { title, description, runtimeMins } = req.body;
 
-    if (!token) return res.status(401).json('user not logged in')
+    const token = req.headers.authorization;
 
-    
-}
+    if (!token) return res.status(401).json('user not logged in');
 
-module.exports = { createMovie }
+    console.log({ title, description, runtimeMins });
+
+    try {
+        jwt.verify(token, secret);
+    } catch (error) {
+        return res.status(401).json(error.message);
+    }
+
+    runtimeMins = parseInt(runtimeMins, 10);
+
+    const movie = {
+        title,
+        description,
+        runtimeMins
+    }
+
+    const createdFilm = await prisma.movie.create({
+        data: {
+            ...movie
+        }
+    })
+
+    res.json(createdFilm);
+};
+
+module.exports = { createMovie };
