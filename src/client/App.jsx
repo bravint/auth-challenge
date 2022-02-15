@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
+import { Home } from './components/Home';
 import { Login } from './components/Login';
 import { Movie } from './components/Movie';
 import { Register } from './components/Register';
@@ -8,7 +11,7 @@ import './App.css';
 
 const apiUrl = 'http://localhost:4000';
 
-function App() {
+export const App = () => {
     const initialForm = {
         username: '',
         password: '',
@@ -24,6 +27,8 @@ function App() {
     const [login, setLogin] = useState(initialForm);
     const [movie, setMovie] = useState(initialMovie);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (localStorage.getItem('token')) setIsLoggedIn(true);
@@ -60,7 +65,8 @@ function App() {
         const name = event.target.name;
         const value = event.target.value;
 
-        if (formType === 'register') setRegister({ ...register, [name]: value });
+        if (formType === 'register')
+            setRegister({ ...register, [name]: value });
 
         if (formType === 'login') setLogin({ ...login, [name]: value });
 
@@ -87,6 +93,8 @@ function App() {
             clearForms();
 
             setIsLoggedIn(true);
+
+            navigate('/movies');
         }
     };
 
@@ -96,6 +104,8 @@ function App() {
         clearForms();
 
         setIsLoggedIn(false);
+
+        navigate('/');
     };
 
     const clearForms = () => {
@@ -108,32 +118,57 @@ function App() {
         <div className="App">
             {!isLoggedIn && (
                 <>
-                    <Register
-                        register={register}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                    />
-                    <Login
-                        login={login}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                    />
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={<Home isLoggedIn={isLoggedIn} />}
+                        />
+                        <Route
+                            path="register"
+                            element={
+                                <Register
+                                    register={register}
+                                    handleChange={handleChange}
+                                    handleSubmit={handleSubmit}
+                                />
+                            }
+                        />
+                        <Route
+                            path="login"
+                            element={
+                                <Login
+                                    login={login}
+                                    handleChange={handleChange}
+                                    handleSubmit={handleSubmit}
+                                />
+                            }
+                        />
+                    </Routes>
                 </>
             )}
             {isLoggedIn && (
                 <>
-                    <h2>Logged In</h2>
-                    <Movie
-                        movie={movie}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                    />
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={<Home isLoggedIn={isLoggedIn} />}
+                        />
+                        <Route
+                            path="movies"
+                            element={
+                                <Movie
+                                    movie={movie}
+                                    handleChange={handleChange}
+                                    handleSubmit={handleSubmit}
+                                    HandleLogout={HandleLogout}
+                                />
+                            }
+                        />
+                    </Routes>
                     <br></br>
                     <button onClick={HandleLogout}>Logout</button>
                 </>
             )}
         </div>
     );
-}
-
-export default App;
+};
