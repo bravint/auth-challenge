@@ -14,17 +14,11 @@ app.use(express.json());
 // Tell express to use a URL Encoding middleware
 app.use(express.urlencoded({ extended: true }));
 
-
-
-
 const userRouter = require('./routers/user');
 app.use('/user', userRouter);
 
 const movieRouter = require('./routers/movie');
 app.use('/movie', movieRouter);
-
-
-
 
 // Set up a default "catch all" route to use when someone visits a route
 // that we haven't built
