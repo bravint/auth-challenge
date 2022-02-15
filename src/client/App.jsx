@@ -25,8 +25,6 @@ function App() {
     const [movie, setMovie] = useState(initialMovie);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    console.log(login);
-
     useEffect(() => {
         if (localStorage.getItem('token')) setIsLoggedIn(true);
     }, [isLoggedIn]);
