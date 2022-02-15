@@ -65,8 +65,7 @@ export const App = () => {
         const name = event.target.name;
         const value = event.target.value;
 
-        if (formType === 'register')
-            setRegister({ ...register, [name]: value });
+        if (formType === 'register') setRegister({ ...register, [name]: value });
 
         if (formType === 'login') setLogin({ ...login, [name]: value });
 
@@ -96,6 +95,8 @@ export const App = () => {
 
             navigate('/movies');
         }
+
+        if (endpoint == 'movie' && data) console.log(data);
     };
 
     const HandleLogout = () => {
@@ -164,7 +165,6 @@ export const App = () => {
                                     movie={movie}
                                     handleChange={handleChange}
                                     handleSubmit={handleSubmit}
-                                    HandleLogout={HandleLogout}
                                 />
                             }
                         />

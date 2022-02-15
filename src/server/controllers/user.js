@@ -25,7 +25,7 @@ const checkPassword = async (textPassword, hashedPassword) => {
 
 const createUser = async (req, res) => {
     console.log(req.headers);
-    console.log(req.body)
+    console.log(req.body);
 
     let { username, password } = req.body;
 
@@ -42,7 +42,7 @@ const createUser = async (req, res) => {
         },
     });
 
-    console.log('createdUser', createdUser)
+    console.log('createdUser', createdUser);
 
     if (createdUser) {
         const token = jwt.sign(user, secret);

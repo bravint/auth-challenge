@@ -26,16 +26,20 @@ const createMovie = async (req, res) => {
     const movie = {
         title,
         description,
-        runtimeMins
-    }
+        runtimeMins,
+    };
 
-    const createdFilm = await prisma.movie.create({
+    const createdMovie = await prisma.movie.create({
         data: {
-            ...movie
-        }
-    })
+            ...movie,
+        },
+    });
 
-    res.json(createdFilm);
+    const fetchedMovies = await prisma.movie.findMany({});
+
+    const response = { createdMovie, fetchedMovies };
+
+    res.json(response);
 };
 
 module.exports = { createMovie };
