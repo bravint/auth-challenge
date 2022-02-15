@@ -28,7 +28,8 @@ function App() {
 
     const postForm = async (endpoint, method, body) => {
         const response = await fetch(`${apiUrl}/${endpoint}`, config(method, body));
-        return (data = await response.json());
+        const data = await response.json();
+        return data;
     };
 
     const config = (method, body) => {
