@@ -7,9 +7,7 @@ const getAllMovies = async () => {
 };
 
 const getMovies = async (req, res) => {
-    const fetchedMovies = await getAllMovies();
-
-    res.json(fetchedMovies);
+    res.status(200).json(await getAllMovies());
 };
 
 const createMovie = async (req, res) => {
@@ -41,9 +39,7 @@ const createMovie = async (req, res) => {
 
     console.log('Created Movie', createdMovie);
 
-    const fetchedMovies = await getAllMovies();
-
-    res.json(await getAllMovies());
+    res.status(201).json(await getAllMovies());
 };
 
 module.exports = { getMovies, createMovie };

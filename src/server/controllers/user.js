@@ -18,6 +18,10 @@ const checkPassword = async (textPassword, hashedPassword) => {
     }
 };
 
+const createToken = async (user) => {
+    return jwt.sign(user, secret);
+};
+
 const createUser = async (req, res) => {
     let { username, password } = req.body;
 
@@ -25,7 +29,7 @@ const createUser = async (req, res) => {
 
     const user = {
         username,
-        password, 
+        password,
     };
 
     const createdUser = await prisma.user.create({
@@ -36,11 +40,7 @@ const createUser = async (req, res) => {
 
     console.log('createdUser', createdUser);
 
-    if (createdUser) {
-        const token = jwt.sign(user, secret);
-
-        return res.json(token);
-    }
+    if (createdUser) return res.status(201).json(createToken(user));
 };
 
 const authUser = async (req, res) => {
@@ -56,17 +56,14 @@ const authUser = async (req, res) => {
 
     const passwordsMatch = await checkPassword(password, foundUser.password);
 
-    if (!passwordsMatch)
-        return res.status(401).json('User authentication failed');
+    if (!passwordsMatch) return res.status(401).json('User authentication failed');
 
     const user = {
         username,
         password,
     };
 
-    const token = jwt.sign(user, secret);
-
-    res.json(token);
+    res.status(201).json(createToken(user));
 };
 
 module.exports = { createUser, authUser };
