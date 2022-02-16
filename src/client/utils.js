@@ -21,11 +21,11 @@ export const fetchConfig = (headers, form) => {
 };
 export const fetchHeader = { 'Content-Type': 'application/json' };
 
-export const postForm = async (endpoint, headers, form) => {
+export const postForm = async (endpoint, headers, form, setError) => {
     try {
         const response = await fetch(`${API_URL}${endpoint}`, fetchConfig(headers, form));
 
-        if (!response.ok) console.log(await response.json());
+        if (!response.ok) return setError(await response.json());
 
         return await response.json();
     } catch (error) {

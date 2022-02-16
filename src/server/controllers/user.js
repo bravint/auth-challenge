@@ -19,7 +19,7 @@ const checkPassword = async (textPassword, hashedPassword) => {
 const createUser = async (req, res) => {
     let { username, password } = req.body;
 
-    password = await hashedPassword(password);
+    password = hashedPassword(password);
 
     const user = {
         username,
@@ -32,7 +32,9 @@ const createUser = async (req, res) => {
         },
     });
 
-    if (createdUser) return res.json(createToken(user));
+    if (!createdUser) return res.status(500).json('User registation failed');
+    
+    res.json(createToken(user));
 };
 
 const authUser = async (req, res) => {

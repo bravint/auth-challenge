@@ -13,17 +13,19 @@ import {
 
 import { fetchHeader, handleChange, initialForm, postForm } from '../utils';
 
+import '../styles/user.css'
+
 export const User = (props) => {
     const { setIsLoggedIn } = props;
 
     const [currentUrl, setCurrentUrl] = useState('');
 
-    const [form, setForm] = useState(initialForm);
+    const [error, setError] = useState(null);
 
+    const [form, setForm] = useState(initialForm);
     const { username, password } = form;
 
     const location = useLocation();
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,8 +34,15 @@ export const User = (props) => {
 
     useEffect(() => {
         setForm(initialForm);
+
         setCurrentUrl(location.pathname);
     }, [location]);
+
+    useEffect(() => {
+        if(!error) return
+
+        setError(null);
+    }, [form]);
 
     const setPageType = () => {
         if (currentUrl === URL.LOGIN) {
@@ -54,7 +63,7 @@ export const User = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const data = await postForm(endpoint, fetchHeader, form);
+        const data = await postForm(endpoint, fetchHeader, form, setError);
 
         if (data) {
             localStorage.setItem(TOKEN, data);
@@ -85,6 +94,9 @@ export const User = (props) => {
                 />
                 <button type={INPUT_TYPE.SUBMIT}>Login</button>
             </form>
+            {error && (
+                <p className='error'>{error}</p>
+            )}
         </>
     );
 };

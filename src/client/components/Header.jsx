@@ -19,7 +19,7 @@ export const Header = (props) => {
 
     return (
         <header>
-            <ul className="links">
+            <ul className='links'>
                 <li>
                     <Link to={URL.HOME}>Home</Link>
                 </li>

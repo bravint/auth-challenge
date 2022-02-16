@@ -45,7 +45,7 @@ export const Movie = () => {
             Authorization: localStorage.getItem(TOKEN),
         };
 
-        const fetchedMovies = await postForm(endpoint, headers, form);
+        const fetchedMovies = await postForm(endpoint, headers, form, setError);
 
         setMovieList(fetchedMovies);
     };

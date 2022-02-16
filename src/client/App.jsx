@@ -12,7 +12,7 @@ export const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        if (localStorage.getItem(TOKEN)) setIsLoggedIn(true);
+        localStorage.getItem(TOKEN) ? setIsLoggedIn(true) : setIsLoggedIn(false);
     }, [isLoggedIn]);
 
     return (
