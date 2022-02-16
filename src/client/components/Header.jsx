@@ -1,33 +1,45 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { TOKEN, URL } from '../config';
 
 import '../styles/header.css';
 
 export const Header = (props) => {
-    const { isLoggedIn, HandleLogout } = props;
+    const { isLoggedIn, setIsLoggedIn } = props;
+
+    const navigate = useNavigate();
+
+    const HandleLogout = () => {
+        localStorage.removeItem(TOKEN);
+
+        setIsLoggedIn(false);
+
+        navigate(URL.HOME);
+    };
 
     return (
         <header>
             <ul className="links">
                 <li>
-                    <Link to="/">Home</Link>
+                    <Link to={URL.HOME}>Home</Link>
                 </li>
                 {!isLoggedIn && (
                     <>
                         <li>
-                            <Link to="/register">Register</Link>
+                            <Link to={URL.REGISTER}>Register</Link>
                         </li>
                         <li>
-                            <Link to="/login">Login</Link>
+                            <Link to={URL.LOGIN}>Login</Link>
                         </li>
                     </>
                 )}
                 {isLoggedIn && (
                     <>
                         <li>
-                            <Link to="/movies">Movies</Link>
+                            <Link to={URL.MOVIES}>Movies</Link>
                         </li>
                         <li>
-                            <a href="#" onClick={HandleLogout}>
+                            <a href={URL.NULL} onClick={HandleLogout}>
                                 Logout
                             </a>
                         </li>

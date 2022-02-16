@@ -1,38 +1,81 @@
-import { API_ENDPOINT, FORM_NAME, PLACEHOLDER } from '../config';
+import { useState, useEffect } from 'react';
 
-export const Movie = (props) => {
-    const { movie, handleChange, handleSubmit, movieList } = props;
+import {
+    API_ENDPOINT,
+    API_URL,
+    INPUT_NAME,
+    INPUT_TYPE,
+    PLACEHOLDER,
+    TOKEN,
+} from '../config';
 
-    const { title, description, runtimeMins } = movie;
+import { fetchHeader, handleChange, postForm } from '../utils';
+
+export const Movie = () => {
+    const initialForm = {
+        title: '',
+        description: '',
+        runtimeMins: '',
+    };
+
+    const [form, setForm] = useState(initialForm);
+    const [movieList, setMovieList] = useState([]);
+
+    const { title, description, runtimeMins } = form;
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            const response = await fetch(`${API_URL}${API_ENDPOINT.MOVIE}`);
+            const data = await response.json();
+            setMovieList(data);
+        };
+
+        fetchMovies();
+    }, []);
+
+    useEffect(() => {
+        setForm(initialForm);
+    }, [movieList]);
+
+    const handleSubmit = async (event, endpoint) => {
+        event.preventDefault();
+
+        let headers = {
+            ...fetchHeader,
+            Authorization: localStorage.getItem(TOKEN),
+        };
+
+        const fetchedMovies = await postForm(endpoint, headers, form);
+
+        setMovieList(fetchedMovies);
+    };
 
     return (
         <>
             <h2>Create a Movie</h2>
-            <form
-                onSubmit={(event) => handleSubmit(event, API_ENDPOINT.MOVIE, movie)}
-            >
+            <form onSubmit={(event) => handleSubmit(event, API_ENDPOINT.MOVIE)}>
                 <input
-                    type="text"
-                    name="title"
+                    type={INPUT_TYPE.TEXT}
+                    name={INPUT_NAME.TITLE}
                     placeholder={PLACEHOLDER.TITLE}
                     value={title}
-                    onChange={(event) => handleChange(event, FORM_NAME.MOVIE)}
+                    onChange={(event) => handleChange(event, form, setForm)}
                 />
                 <input
-                    type="text"
-                    name="description"
+                    type={INPUT_TYPE.TEXT}
+                    name={INPUT_NAME.DESC}
                     placeholder={PLACEHOLDER.DESC}
                     value={description}
-                    onChange={(event) => handleChange(event, FORM_NAME.MOVIE)}
+                    onChange={(event) => handleChange(event, form, setForm)}
                 />
                 <input
-                    type="text"
-                    name="runtimeMins"
+                    type={INPUT_TYPE.TEXT}
+                    name={INPUT_NAME.RUNTIME}
                     placeholder={PLACEHOLDER.RUNTIME}
                     value={runtimeMins}
-                    onChange={(event) => handleChange(event, FORM_NAME.MOVIE)}
+                    onChange={(event) => handleChange(event, form, setForm)}
                 />
-                <button type="submit">Create Movie</button>
+                <button type={INPUT_TYPE.SUBMIT}>Create Movie</button>
             </form>
 
             <h2>Movie List</h2>

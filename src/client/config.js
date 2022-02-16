@@ -9,9 +9,22 @@ export class API_ENDPOINT {
 }
 
 export class FORM_NAME {
-    static LOGIN = 'login';
-    static REGISTER = 'register';
-    static MOVIE = 'movie';
+    static LOGIN = 'Login';
+    static REGISTER = 'Register';
+}
+
+export class INPUT_NAME {
+    static USERNAME = 'username';
+    static PASSWORD = 'password';
+    static TITLE = 'title'
+    static DESC = 'description'
+    static RUNTIME = 'runtimeMins'
+}
+
+export class INPUT_TYPE {
+    static TEXT = 'text';
+    static PASSWORD = 'password';
+    static SUBMIT = 'submit'
 }
 
 export class PLACEHOLDER {
@@ -24,7 +37,9 @@ export class PLACEHOLDER {
 
 export class URL {
     static HOME = '/';
-    static LOGIN = 'login';
-    static MOVIES = 'movies';
-    static REGISTER = 'register';   
+    static LOGIN = '/login';
+    static MOVIES = '/movies';
+    static NOT_FOUND = '*'
+    static REGISTER = '/register';
+    static NULL = '#'   
 }
