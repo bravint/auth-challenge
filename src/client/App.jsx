@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 
+import { Header } from './components/Header';
 import { Home } from './components/Home';
 import { Login } from './components/Login';
 import { Movie } from './components/Movie';
 import { Register } from './components/Register';
 
-import './App.css';
-
-const apiUrl = 'http://localhost:4000';
+import { API_URL, API_ENDPOINT, FORM_NAME, TOKEN, URL } from './config';
 
 export const App = () => {
     const initialForm = {
@@ -26,31 +25,25 @@ export const App = () => {
     const [register, setRegister] = useState(initialForm);
     const [login, setLogin] = useState(initialForm);
     const [movie, setMovie] = useState(initialMovie);
-
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    const [movieList, setMovieList] = useState([])
+    const [movieList, setMovieList] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (localStorage.getItem('token')) setIsLoggedIn(true);
+        if (localStorage.getItem(TOKEN)) setIsLoggedIn(true);
     }, [isLoggedIn]);
 
     const postForm = async (endpoint, headers, body) => {
         try {
             const response = await fetch(
-                `${apiUrl}/${endpoint}`,
+                `${API_URL}${endpoint}`,
                 config(headers, body)
             );
 
-            if (!response.ok) {
-                console.log(await response.json());
-            }
+            if (!response.ok) console.log(await response.json());
 
-            const data = await response.json();
-
-            return data;
+            return await response.json();
         } catch (error) {
             console.log(error);
         }
@@ -68,20 +61,18 @@ export const App = () => {
         const name = event.target.name;
         const value = event.target.value;
 
-        if (formType === 'register') setRegister({ ...register, [name]: value });
-
-        if (formType === 'login') setLogin({ ...login, [name]: value });
-
-        if (formType === 'movie') setMovie({ ...movie, [name]: value });
+        if (formType === FORM_NAME.REGISTER) setRegister({ ...register, [name]: value });
+        if (formType === FORM_NAME.LOGIN) setLogin({ ...login, [name]: value });
+        if (formType === FORM_NAME.MOVIE) setMovie({ ...movie, [name]: value });
     };
 
     const handleSubmit = async (event, endpoint, body) => {
         let headers = { 'Content-Type': 'application/json' };
 
-        if (endpoint === 'movie') {
+        if (endpoint === API_ENDPOINT.MOVIE) {
             headers = {
                 ...headers,
-                Authorization: localStorage.getItem('token'),
+                Authorization: localStorage.getItem(TOKEN),
             };
         }
 
@@ -89,33 +80,34 @@ export const App = () => {
 
         const data = await postForm(endpoint, headers, body);
 
-        if (endpoint !== 'movie' && data) {
-            localStorage.setItem('token', data);
+        if (endpoint !== API_ENDPOINT.MOVIE && data) {
+            localStorage.setItem(TOKEN, data);
 
             clearForms();
 
             setIsLoggedIn(true);
 
-            const response = await fetch (`${apiUrl}/movie`)
+            const response = await fetch(`${API_URL}${API_ENDPOINT.MOVIE}`);
             const movies = await response.json();
-            setMovieList(movies)
+            setMovieList(movies);
 
-            navigate('/movies');
+            navigate(URL.MOVIES);
         }
 
-        if (endpoint == 'movie' && data) setMovieList(data)
-        
-        
+        if (endpoint === API_ENDPOINT.MOVIE && data) {
+            setMovieList(data);
+            setMovie(initialMovie);
+        }
     };
 
     const HandleLogout = () => {
-        localStorage.clear();
+        localStorage.removeItem(TOKEN);
 
         clearForms();
 
         setIsLoggedIn(false);
 
-        navigate('/');
+        navigate(URL.HOME);
     };
 
     const clearForms = () => {
@@ -126,15 +118,15 @@ export const App = () => {
 
     return (
         <div className="App">
+            <Header 
+                isLoggedIn={isLoggedIn} 
+                HandleLogout={HandleLogout} 
+            />
             {!isLoggedIn && (
                 <>
                     <Routes>
                         <Route
-                            path="/"
-                            element={<Home isLoggedIn={isLoggedIn} />}
-                        />
-                        <Route
-                            path="register"
+                            path={URL.REGISTER}
                             element={
                                 <Register
                                     register={register}
@@ -144,7 +136,7 @@ export const App = () => {
                             }
                         />
                         <Route
-                            path="login"
+                            path={URL.LOGIN}
                             element={
                                 <Login
                                     login={login}
@@ -153,9 +145,13 @@ export const App = () => {
                                 />
                             }
                         />
-                        <Route
-                            path="*"
-                            element={<Home isLoggedIn={isLoggedIn} />}
+                        <Route 
+                            path={URL.HOME} 
+                            element={<Home />} 
+                        />
+                        <Route 
+                            path="*" 
+                            element={<Home />} 
                         />
                     </Routes>
                 </>
@@ -164,11 +160,7 @@ export const App = () => {
                 <>
                     <Routes>
                         <Route
-                            path="/"
-                            element={<Home isLoggedIn={isLoggedIn} />}
-                        />
-                        <Route
-                            path="movies"
+                            path={URL.MOVIES}
                             element={
                                 <Movie
                                     movie={movie}
@@ -178,13 +170,15 @@ export const App = () => {
                                 />
                             }
                         />
-                        <Route
-                            path="*"
-                            element={<Home isLoggedIn={isLoggedIn} />}
+                        <Route 
+                            path={URL.HOME} 
+                            element={<Home />} 
+                        />
+                        <Route 
+                            path="*" 
+                            element={<Home />} 
                         />
                     </Routes>
-                    <br></br>
-                    <button onClick={HandleLogout}>Logout</button>
                 </>
             )}
         </div>

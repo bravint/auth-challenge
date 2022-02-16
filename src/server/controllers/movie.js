@@ -1,16 +1,16 @@
-const { PrismaClient } = require('@prisma/client');
-
 const jwt = require('jsonwebtoken');
 
-const prisma = new PrismaClient();
+const { prisma, secret } = require('../utils');
 
-const secret = 'secret';
+const getAllMovies = async () => {
+    return await prisma.movie.findMany({});
+};
 
 const getMovies = async (req, res) => {
-    const fetchedMovies = await prisma.movie.findMany({});
+    const fetchedMovies = await getAllMovies();
 
     res.json(fetchedMovies);
-}
+};
 
 const createMovie = async (req, res) => {
     let { title, description, runtimeMins } = req.body;
@@ -18,8 +18,6 @@ const createMovie = async (req, res) => {
     const token = req.headers.authorization;
 
     if (!token) return res.status(401).json('user not logged in');
-
-    console.log({ title, description, runtimeMins });
 
     try {
         jwt.verify(token, secret);
@@ -41,9 +39,11 @@ const createMovie = async (req, res) => {
         },
     });
 
-    const fetchedMovies = await prisma.movie.findMany({});
+    console.log('Created Movie', createdMovie);
 
-    res.json(fetchedMovies);
+    const fetchedMovies = await getAllMovies();
+
+    res.json(await getAllMovies());
 };
 
 module.exports = { getMovies, createMovie };
