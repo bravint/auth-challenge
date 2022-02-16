@@ -2,13 +2,9 @@ const jwt = require('jsonwebtoken');
 
 const { prisma, secret } = require('../utils');
 
-const getAllMovies = async () => {
-    return await prisma.movie.findMany({});
-};
+const findAllMovies = async () => await prisma.movie.findMany({});
 
-const getMovies = async (req, res) => {
-    res.status(200).json(await getAllMovies());
-};
+const getMovies = async (req, res) => res.status(200).json(await findAllMovies());
 
 const createMovie = async (req, res) => {
     let { title, description, runtimeMins } = req.body;
@@ -39,7 +35,7 @@ const createMovie = async (req, res) => {
 
     console.log('Created Movie', createdMovie);
 
-    res.status(201).json(await getAllMovies());
+    res.status(201).json(await findAllMovies());
 };
 
 module.exports = { getMovies, createMovie };

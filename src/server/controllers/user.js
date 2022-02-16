@@ -3,11 +3,9 @@ const jwt = require('jsonwebtoken');
 
 const { prisma, secret, saltRounds } = require('../utils');
 
-const hashedPassword = async (password) => {
-    const salt = bcrypt.genSaltSync(saltRounds);
+const hashedPassword = (password) => bcrypt.hashSync(password, saltRounds);
 
-    return (hash = bcrypt.hashSync(password, salt));
-};
+const createToken = (payload) => jwt.sign(payload, secret);
 
 const checkPassword = async (textPassword, hashedPassword) => {
     try {
@@ -16,10 +14,6 @@ const checkPassword = async (textPassword, hashedPassword) => {
         console.log(`error in password check`, error);
         return error;
     }
-};
-
-const createToken = async (user) => {
-    return jwt.sign(user, secret);
 };
 
 const createUser = async (req, res) => {
@@ -38,9 +32,7 @@ const createUser = async (req, res) => {
         },
     });
 
-    console.log('createdUser', createdUser);
-
-    if (createdUser) return res.status(201).json(createToken(user));
+    if (createdUser) return res.json(createToken(user));
 };
 
 const authUser = async (req, res) => {
@@ -63,7 +55,7 @@ const authUser = async (req, res) => {
         password,
     };
 
-    res.status(201).json(createToken(user));
+    res.json(createToken(user));
 };
 
 module.exports = { createUser, authUser };
