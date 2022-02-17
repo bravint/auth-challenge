@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const saltRounds = 10;
 
-const secret = 'secret';
+const secret = process.env.SECRET;
 
 module.exports = {
     prisma,

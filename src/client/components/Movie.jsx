@@ -5,6 +5,7 @@ import {
     API_URL,
     INPUT_NAME,
     INPUT_TYPE,
+    MOVIE_LIST,
     PLACEHOLDER,
     TOKEN,
 } from '../config';
@@ -85,8 +86,8 @@ export const Movie = () => {
                     return (
                         <li key={id}>
                             <h3>{title}</h3>
-                            <p>{description}</p>
-                            <p>{runtimeMins}</p>
+                            <p>{MOVIE_LIST.DESC}{description}</p>
+                            <p>{MOVIE_LIST.RUNTIME}{runtimeMins}</p>
                         </li>
                     );
                 })}

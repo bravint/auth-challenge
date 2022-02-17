@@ -27,6 +27,12 @@ export class INPUT_TYPE {
     static SUBMIT = 'submit'
 }
 
+export class MOVIE_LIST {
+    static TITLE = 'Title: ';
+    static DESC = 'Description: ';
+    static RUNTIME = 'Runtime: '
+}
+
 export class PLACEHOLDER {
     static USERNAME = 'Enter Username';
     static PASSWORD = 'Enter Password';
