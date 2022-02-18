@@ -30,10 +30,6 @@ export const User = (props) => {
 
     useEffect(() => {
         setForm(initialForm);
-    }, []);
-
-    useEffect(() => {
-        setForm(initialForm);
 
         setCurrentUrl(location.pathname);
     }, [location]);
