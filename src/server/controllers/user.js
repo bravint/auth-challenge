@@ -34,7 +34,7 @@ const createUser = async (req, res) => {
 
     if (!createdUser) return res.status(500).json('User registation failed');
     
-    res.json(createToken(user));
+    res.json(createToken(username));
 };
 
 const authUser = async (req, res) => {
@@ -57,7 +57,7 @@ const authUser = async (req, res) => {
         password,
     };
 
-    res.json(createToken(user));
+    res.json(createToken(username));
 };
 
 module.exports = { createUser, authUser };
