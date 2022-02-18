@@ -6,8 +6,7 @@ export const initialForm = {
 };
 
 export const handleChange = (event, form, setForm) => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
 
     setForm({ ...form, [name]: value });
 };
