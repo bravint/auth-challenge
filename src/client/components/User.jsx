@@ -80,6 +80,7 @@ export const User = (props) => {
                     placeholder={PLACEHOLDER.USERNAME}
                     value={username}
                     onChange={(event) => handleChange(event, form, setForm)}
+                    required
                 />
                 <input
                     type={INPUT_TYPE.PASSWORD}
@@ -87,6 +88,7 @@ export const User = (props) => {
                     placeholder={PLACEHOLDER.PASSWORD}
                     value={password}
                     onChange={(event) => handleChange(event, form, setForm)}
+                    required
                 />
                 <button type={INPUT_TYPE.SUBMIT}>Login</button>
             </form>
